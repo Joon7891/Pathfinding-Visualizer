@@ -1,21 +1,45 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathfinding_Visualizer.Utility;
 using Pathfinding_Visualizer.World;
 
 namespace Pathfinding_Visualizer.Driver
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// The driver class of this program
     /// </summary>
     public class Main : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        /// <summary>
+        /// Static singleton instance of <see cref="Main"/>
+        /// </summary>
+        public static Main Singleton { get; private set; }
 
+        /// <summary>
+        /// <see cref="ContentManager"/> for <see cref="Main"/>
+        /// </summary>
+        public new ContentManager Content { get; private set; }
+
+        // Graphics handling object
+        private SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+
+        // Screen width and height
+        public const int WIDTH = 960;
+        public const int HEIGHT = 640;
+
+        // Instance of the game map
+        private Map map;
+
+        /// <summary>
+        /// Constructor for this <see cref="Main"/>
+        /// </summary>
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
+            Content = base.Content;
             Content.RootDirectory = "Content";
         }
 
@@ -27,8 +51,11 @@ namespace Pathfinding_Visualizer.Driver
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            // Setting up graphic frame
+            IsMouseVisible = true;
+            graphics.PreferredBackBufferHeight = HEIGHT;
+            graphics.PreferredBackBufferWidth = WIDTH;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -38,10 +65,12 @@ namespace Pathfinding_Visualizer.Driver
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            // Creating spritebatch and setting up singleton
+            Singleton = this;
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // Creating new map
+            map = new Map(10);
         }
 
         /// <summary>
@@ -60,11 +89,13 @@ namespace Pathfinding_Visualizer.Driver
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // Updating various utility
+            MouseHelper.Update(gameTime);
 
-            // TODO: Add your update logic here
+            // Updating map
+            map.Update(gameTime);
 
+            // Updating parent game
             base.Update(gameTime);
         }
 
@@ -74,11 +105,15 @@ namespace Pathfinding_Visualizer.Driver
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            // Beginning spriteBatch
+            spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            // Drawing map
+            map.Draw(spriteBatch);
 
+            // Drawing base game and ending spriteBatch
             base.Draw(gameTime);
+            spriteBatch.End();
         }
     }
 }
