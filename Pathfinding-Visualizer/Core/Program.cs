@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pathfinding_Visualizer.Driver
+namespace Pathfinding_Visualizer.Core
 {
 #if WINDOWS || LINUX
     /// <summary>

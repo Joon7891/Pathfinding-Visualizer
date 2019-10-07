@@ -2,10 +2,10 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathfinding_Visualizer.Utility;
+using Pathfinding_Visualizer.Helpers;
 using Pathfinding_Visualizer.World;
 
-namespace Pathfinding_Visualizer.Driver
+namespace Pathfinding_Visualizer.Core
 {
     /// <summary>
     /// The driver class of this program
@@ -21,6 +21,16 @@ namespace Pathfinding_Visualizer.Driver
         /// <see cref="ContentManager"/> for <see cref="Main"/>
         /// </summary>
         public new ContentManager Content { get; private set; }
+
+        /// <summary>
+        /// Whether or whether not to run a search on the map
+        /// </summary>
+        public bool SearchStatus { get; private set; } = false;
+
+        /// <summary>
+        /// The time between rounds of breadth-first search
+        /// </summary>
+        public float SearchTime { get; private set; } = 1.0f;
 
         // Graphics handling object
         private SpriteBatch spriteBatch;
@@ -70,7 +80,7 @@ namespace Pathfinding_Visualizer.Driver
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Creating new map
-            map = new Map(10);
+            map = new Map(50);
         }
 
         /// <summary>
@@ -91,6 +101,7 @@ namespace Pathfinding_Visualizer.Driver
         {
             // Updating various utility
             MouseHelper.Update(gameTime);
+            KeyboardHelper.Update(gameTime);
 
             // Updating map
             map.Update(gameTime);

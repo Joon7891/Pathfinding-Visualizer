@@ -1,44 +1,18 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Pathfinding_Visualizer.Graphics;
-using Pathfinding_Visualizer.Driver;
+using Pathfinding_Visualizer.Core;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Pathfinding_Visualizer.World
 {
     public sealed class Tile : IGraphic
     {
         /// <summary>
-        /// An enum to contain the states of this <see cref="Tile"/>
+        /// The <see cref="TileType"/> of this <see cref="Tile"/>
         /// </summary>
-        [Flags]
-        public enum TileState
-        {
-            /// <summary>
-            /// Denotes that the tile can be visited
-            /// </summary>
-            Open = 1,
-
-            /// <summary>
-            /// Denotes that the tile cannot be visited
-            /// </summary>
-            Closed = 2,
-
-            /// <summary>
-            /// Denotes that the tile has been visited in the path search
-            /// </summary>
-            Active = 4,
-
-            /// <summary>
-            /// Denotes that the tile has not been visited in the paths search
-            /// </summary>
-            Inactive = 8
-        }
-
-        /// <summary>
-        /// The <see cref="TileState"/> of this <see cref="Tile"/>
-        /// </summary>
-        public TileState State { get; private set; } = TileState.Open | TileState.Inactive;
+        public TileType Type { get; set; } = TileType.Open;
 
         /// <summary>
         /// The rectangle containing this <see cref="Tile"/>
@@ -47,6 +21,14 @@ namespace Pathfinding_Visualizer.World
 
         // Images and bounding rectangle to draw tile
         private static Texture2D tileImage;
+        private static Dictionary<TileType, Color> tileTypeColorMap = new Dictionary<TileType, Color>
+        {
+            { TileType.Open, Color.White },
+            { TileType.Closed, Color.Black },
+            { TileType.Visited, Color.Yellow },
+            { TileType.Start, Color.Green },
+            { TileType.Finish, Color.Red }
+        };
 
         /// <summary>
         /// Static constructor for <see cref="Tile"/> object
@@ -76,25 +58,7 @@ namespace Pathfinding_Visualizer.World
         public void Draw(SpriteBatch spriteBatch)
         {
             // Drawing appropraite tile given the tile state
-            if (State.HasFlag(TileState.Open))
-            {
-                spriteBatch.Draw(tileImage, Rectangle, State.HasFlag(TileState.Active) 
-                    ? Color.Green : Color.White);
-            }
-            else
-            {
-                spriteBatch.Draw(tileImage, Rectangle, Color.Black);
-            }
-        }
-
-        /// <summary>
-        /// Subprogram to flip the state of this <see cref="Tile"/>
-        /// </summary>
-        public void FlipState()
-        {
-            // Flipes the open/closed state of the tile
-            if (State.HasFlag(TileState.Open)) State++;
-            else State--;
+            spriteBatch.Draw(tileImage, Rectangle, tileTypeColorMap[Type]);
         }
 
         /// <summary>
@@ -102,7 +66,8 @@ namespace Pathfinding_Visualizer.World
         /// </summary>
         public void Reset()
         {
-            State = TileState.Open | TileState.Inactive;
+            // Resetting the tile type
+            Type = TileType.Open;
         }
     }
 }

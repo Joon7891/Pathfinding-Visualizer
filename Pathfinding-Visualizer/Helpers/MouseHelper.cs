@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pathfinding_Visualizer.Utility
+namespace Pathfinding_Visualizer.Helpers
 {
     public static class MouseHelper
     {
@@ -52,6 +52,13 @@ namespace Pathfinding_Visualizer.Utility
         /// <param name="rectangle">The rectangle to check if it is left clicked</param>
         /// <returns>Whether the rectangle is left clicked</returns>
         public static bool IsRectangleLeftClicked(Rectangle rectangle) => NewLeftClick() && ContainsRectangle(rectangle);
+
+        /// <summary>
+        /// Subprogram to determine whether a rectangle is left pressed
+        /// </summary>
+        /// <param name="rectangle">The rectangle to check if it is left pressed</param>
+        /// <returns>Whether the rectangle is left pressed</returns>
+        public static bool IsRectangleLeftPressed(Rectangle rectangle) => newMouse.LeftButton == ButtonState.Pressed && ContainsRectangle(rectangle);
 
         /// <summary>
         /// Subprogram to determine if the cursor is contained within a given rectangle

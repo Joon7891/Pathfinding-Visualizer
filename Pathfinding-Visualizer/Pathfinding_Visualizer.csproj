@@ -41,15 +41,19 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Driver\Main.cs" />
-    <Compile Include="Driver\Program.cs" />
+    <Compile Include="Core\Main.cs" />
+    <Compile Include="Core\Program.cs" />
     <Compile Include="Graphics\Button.cs" />
     <Compile Include="Graphics\IGraphic.cs" />
     <Compile Include="Graphics\Text.cs" />
+    <Compile Include="Helpers\KeyboardHelper.cs" />
+    <Compile Include="Helpers\Vector2Int.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\MouseHelper.cs" />
+    <Compile Include="Helpers\MouseHelper.cs" />
     <Compile Include="World\Map.cs" />
     <Compile Include="World\Tile.cs" />
+    <Compile Include="World\TileNode.cs" />
+    <Compile Include="World\TileType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
